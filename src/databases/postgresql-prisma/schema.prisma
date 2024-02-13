@@ -1,0 +1,137 @@
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  schemas  = ["base", "account", "event"]
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "darwin-arm64"]
+  previewFeatures = ["multiSchema"]
+}
+
+model Creator {
+  id        Int                @id @default(autoincrement())
+  publicId  String             @unique @default(uuid()) @db.Uuid
+  name      String
+  email     String
+  password  String
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  events    SecretSantaEvent[]
+
+  @@schema("account")
+}
+
+model SecretSantaEvent {
+  id                    Int            @id @default(autoincrement())
+  publicId              String         @unique @default(uuid()) @db.Uuid
+  location              String
+  spendLimit            Int
+  settedAllParticipants Boolean
+  eventBeginAt          DateTime
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  creator               Creator        @relation(fields: [creatorPublicId], references: [publicId])
+  creatorPublicId       String         @db.Uuid
+  participants          Participant[]
+  chats                 AnonimChat[]
+  giftPairs             GiftPair[]
+  giftWishlists         GiftWishlist[]
+  giftExchangies        GiftExchange[]
+
+  @@schema("event")
+}
+
+model Participant {
+  id                 Int                 @id @default(autoincrement())
+  publicId           String              @unique @default(uuid()) @db.Uuid
+  name               String
+  email              String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  chatMessages       AnonimChatMessage[]
+  events             SecretSantaEvent[]
+  giverGiftPairs     GiftPair[]          @relation("GiverGiftPair")
+  receivereGiftPairs GiftPair[]          @relation("ReceiverGiftPair")
+  giftWishlists      GiftWishlist[]
+  chats              AnonimChat[]
+  giftExchangies     GiftExchange[]
+
+  @@schema("event")
+}
+
+model GiftPair {
+  id               Int              @id @default(autoincrement())
+  publicId         String           @unique @default(uuid()) @db.Uuid
+  giver            Participant      @relation("GiverGiftPair", fields: [giverPublicId], references: [publicId])
+  giverPublicId    String           @db.Uuid
+  receiver         Participant      @relation("ReceiverGiftPair", fields: [receiverPublicId], references: [publicId])
+  receiverPublicId String           @db.Uuid
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  event            SecretSantaEvent @relation(fields: [eventPublicId], references: [publicId])
+  eventPublicId    String           @db.Uuid
+
+  @@schema("event")
+}
+
+model AnonimChat {
+  id              Int                 @id @default(autoincrement())
+  publicId        String              @unique @default(uuid()) @db.Uuid
+  topic           String              @unique @db.VarChar(255)
+  creator         Participant         @relation(fields: [creatorPublicId], references: [publicId])
+  creatorPublicId String              @db.Uuid
+  messages        AnonimChatMessage[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  event           SecretSantaEvent    @relation(fields: [eventPublicId], references: [publicId])
+  eventPublicId   String              @db.Uuid
+
+  @@schema("event")
+}
+
+model AnonimChatMessage {
+  id                   Int         @id @default(autoincrement())
+  publicId             String      @unique @default(uuid()) @db.Uuid
+  message              String      @db.Text()
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  chat                 AnonimChat  @relation(fields: [chatPublicId], references: [publicId])
+  chatPublicId         String      @db.Uuid
+  participant          Participant @relation(fields: [participantsPublicId], references: [publicId])
+  participantsPublicId String      @db.Uuid
+
+  @@schema("event")
+}
+
+model GiftWishlist {
+  id                  Int              @id @default(autoincrement())
+  publicId            String           @unique @default(uuid()) @db.Uuid
+  name                String
+  image               String
+  gitfUrl             String
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  participant         Participant      @relation(fields: [participantPublicId], references: [publicId])
+  participantPublicId String           @db.Uuid
+  event               SecretSantaEvent @relation(fields: [eventPublicId], references: [publicId])
+  eventPublicId       String           @db.Uuid
+
+  @@schema("event")
+}
+
+model GiftExchange {
+  id                  Int              @id @default(autoincrement())
+  publicId            String           @unique @default(uuid()) @db.Uuid
+  sendGiftAt          DateTime
+  receiveGiftAt       DateTime
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  participant         Participant      @relation(fields: [participantPublicId], references: [publicId])
+  participantPublicId String           @db.Uuid
+  event               SecretSantaEvent @relation(fields: [eventPublicId], references: [publicId])
+  eventPublicId       String           @db.Uuid
+
+  @@schema("event")
+}

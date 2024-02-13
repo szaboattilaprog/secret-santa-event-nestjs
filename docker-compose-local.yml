@@ -1,0 +1,30 @@
+version: "3.9"
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  sercer-santa-app-network:
+
+
+services:
+  db-service:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-secet-santa-app-db}
+      - POSTGRES_USER=${POSTGRES_USER:-secret-stanta-app-user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-nopassword}
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw,delegated
+    ports:
+      - "5432:5432"
+    networks:
+      - sercer-santa-app-network
+    env_file:
+      - .env
+    restart: always
