@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { GiftWishlistsService } from '@/src/gift-wishlists/gift-wishlists.service';
 
 describe('GiftWishlistsService', () => {

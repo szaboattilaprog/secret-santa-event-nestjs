@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnonimChatMessageDto } from '@/src/anonim-chat-messages/dto/create-anonim-chat-message.dto';
-import { UpdateAnonimChatMessageDto } from '@/src/anonim-chat-messages/dto/update-anonim-chat-message.dto';
+import { FindAllAnonimChatMessageDto } from '@/src/anonim-chat-messages/dto/find-all-anonim-chat-message.dto';
+import { AnonimChatMessagesRepository } from '@/src/anonim-chat-messages/entities/repositories/anonim-chat-messages-repository/anonim-chat-messages-repository';
+import { AnonimChatMessage } from '@/src/anonim-chat-messages/entities/anonim-chat-message.entity';
 
 @Injectable()
 export class AnonimChatMessagesService {
-  create(createAnonimChatMessageDto: CreateAnonimChatMessageDto) {
-    return 'This action adds a new anonimChatMessage';
+  constructor(
+    private anonimChatMessagesRepository: AnonimChatMessagesRepository
+  ) {
   }
 
-  findAll() {
-    return `This action returns all anonimChatMessages`;
+  async create(createAnonimChatMessageDto: CreateAnonimChatMessageDto): Promise<AnonimChatMessage> {
+    const anonimChatMessage = await this.anonimChatMessagesRepository.create(createAnonimChatMessageDto);
+
+    delete anonimChatMessage.id;
+
+    return anonimChatMessage;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} anonimChatMessage`;
-  }
+  async findAll(findAllAnonimChatMessageDto: FindAllAnonimChatMessageDto): Promise<AnonimChatMessage[]> {
+    const anonimChatMessages = await this.anonimChatMessagesRepository.findAll(findAllAnonimChatMessageDto);
 
-  update(id: number, updateAnonimChatMessageDto: UpdateAnonimChatMessageDto) {
-    return `This action updates a #${id} anonimChatMessage`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} anonimChatMessage`;
+    return anonimChatMessages.map(anonimChatMessage => {
+      delete anonimChatMessage.id;
+      return anonimChatMessage;
+    });
   }
 }

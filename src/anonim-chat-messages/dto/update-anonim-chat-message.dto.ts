@@ -1,8 +1,10 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAnonimChatMessageDto } from '@/src/anonim-chat-messages/dto/create-anonim-chat-message.dto';
+import { ApiProperty } from '@nestjs/swagger'
+import { IsString, IsNotEmpty, Length, } from 'class-validator'
 
-export class UpdateAnonimChatMessageDto extends PartialType(
-  CreateAnonimChatMessageDto,
-) {
-  id: number;
+export class UpdateAnonimChatMessageDto {
+  @ApiProperty({ example: 'Hello, how are you?', description: 'The message', required: true })
+  @IsString()
+  @IsNotEmpty()
+  @Length(1, 255)
+  message: string
 }

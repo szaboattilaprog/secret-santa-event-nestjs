@@ -1,26 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateGiftWishlistDto } from '@/src/gift-wishlists/dto/create-gift-wishlist.dto';
 import { UpdateGiftWishlistDto } from '@/src/gift-wishlists/dto/update-gift-wishlist.dto';
+import { GiftWishlistsRepository } from '@/src/gift-wishlists/entities/repositories/gift-wishlists-repository/gift-wishlists-repository';
+import { GiftWishlist } from '@/src/gift-wishlists/entities/gift-wishlist.entity';
 
 @Injectable()
 export class GiftWishlistsService {
-  create(createGiftWishlistDto: CreateGiftWishlistDto) {
-    return 'This action adds a new giftWishlist';
+  constructor(
+    private giftWishlistsRepository: GiftWishlistsRepository,
+    private eventEmitter: EventEmitter2
+  ) {
   }
 
-  findAll() {
-    return `This action returns all giftWishlists`;
+  async create(createGiftWishlistDto: CreateGiftWishlistDto): Promise<GiftWishlist> {
+    const giftWishlist = await this.giftWishlistsRepository.create(createGiftWishlistDto);
+
+    if (!giftWishlist) {
+      throw new NotFoundException('GiftWishlist not created');
+    }
+
+    delete giftWishlist.id;
+
+    return giftWishlist;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} giftWishlist`;
+  async findAll(participantPublicId: string): Promise<GiftWishlist[]> {
+    const giftWishlists = await this.giftWishlistsRepository.findAll(participantPublicId);
+
+    return giftWishlists.map(giftWishlist => {
+      delete giftWishlist.id;
+      return giftWishlist;
+    });
   }
 
-  update(id: number, updateGiftWishlistDto: UpdateGiftWishlistDto) {
-    return `This action updates a #${id} giftWishlist`;
+  async findOne(publicId: string): Promise<GiftWishlist> {
+    const giftWishlist = await this.giftWishlistsRepository.findOne(publicId);
+
+    if (!giftWishlist) {
+      throw new NotFoundException('GiftWishlist not found');
+    }
+
+    delete giftWishlist.id;
+
+    return giftWishlist;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} giftWishlist`;
+  async update(participantPublicId: string, publicId: string, updateGiftWishlistDto: UpdateGiftWishlistDto): Promise<GiftWishlist> {
+    const giftWishlist = await this.giftWishlistsRepository.update(participantPublicId, publicId, updateGiftWishlistDto);
+
+    if (!giftWishlist) {
+      throw new NotFoundException('GiftWishlist not found');
+    }
+
+    delete giftWishlist.id;
+
+    return giftWishlist;
+  }
+
+  async remove(participantPublicId: string, publicId: string) {
+    return this.giftWishlistsRepository.remove(participantPublicId, publicId);
   }
 }

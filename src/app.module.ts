@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PostgresqlPrismaModule } from '@/src/databases/postgresql-prisma/postgresql-prisma.module';
+import { AppMailerModule } from '@/src/app-mailer/app-mailer.module';
+import { AuthModule } from '@/src/auth/auth.module';
 import { CreatorsModule } from '@/src/creators/creators.module';
 import { SecretSantaEventsModule } from '@/src/secret-santa-events/secret-santa-events.module';
 import { ParticipantsModule } from '@/src/participants/participants.module';
@@ -9,7 +13,13 @@ import { AnonimChatMessagesModule } from '@/src/anonim-chat-messages/anonim-chat
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
+    EventEmitterModule.forRoot(),
     PostgresqlPrismaModule,
+    AuthModule,
+    AppMailerModule,
     CreatorsModule,
     SecretSantaEventsModule,
     ParticipantsModule,

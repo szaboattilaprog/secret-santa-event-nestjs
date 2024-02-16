@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ParticipantsController } from '@/src/participants/participants.controller';
 import { ParticipantsService } from '@/src/participants/participants.service';
 

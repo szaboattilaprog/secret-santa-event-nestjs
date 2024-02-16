@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreatorsService } from '@/src/creators/creators.service';
 
 describe('CreatorsService', () => {

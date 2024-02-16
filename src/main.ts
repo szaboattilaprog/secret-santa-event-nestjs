@@ -49,7 +49,6 @@ const bootstrap = async () => {
     }),
   );
 
-  // Change the URL prefix to `/api` on backend
   app.setGlobalPrefix('api');
   app.enableCors();
 

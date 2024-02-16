@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SecretSantaEventsService } from '@/src/secret-santa-events/secret-santa-events.service';
 
 describe('SecretSantaEventsService', () => {
