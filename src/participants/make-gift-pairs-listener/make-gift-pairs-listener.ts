@@ -21,7 +21,7 @@ export class MakeGiftPairsListener {
     const participants = await this.participantsRepository.findAll({ eventPublicId });
     this.makeRandomPairs(participants);
     for (const participant of participants) {
-      this.appMailerService.sendYouArePartcipantMail(participant.name, participant.email, secretSantaEvent, participant.givesToParticipant.name, eventPublicId, participant.publicId);
+      this.appMailerService.sendYouArePartcipantMail(participant, secretSantaEvent);
     }
   }
 

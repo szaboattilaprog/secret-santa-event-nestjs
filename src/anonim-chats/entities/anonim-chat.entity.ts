@@ -16,8 +16,8 @@ export class AnonimChat implements prisma.AnonimChat {
   @Length(1, 255)
   topic: string
 
-  @ApiProperty({ description: 'The public id of the creator participant', readOnly: true })
-  readonly creatorParticipantPublicId: string
+  @ApiProperty({ description: 'The public id of the organizer participant', readOnly: true })
+  readonly participantPublicId: string
 
   @ApiProperty({ description: 'The public id of the Secret Santa Event', readOnly: true })
   readonly eventPublicId: string

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsString, Length, IsEmail, IsOptional } from 'class-validator'
 
-export class UpdateByCreatorParticipantDto {
+export class UpdateByOrganizerParticipantDto {
   @ApiProperty({ example: 'John Doe', description: 'The name of participant.', required: false })
   @IsString()
   @IsOptional()

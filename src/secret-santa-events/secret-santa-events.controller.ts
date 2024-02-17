@@ -21,11 +21,11 @@ import { UpdateSecretSantaEventDto } from '@/src/secret-santa-events/dto/update-
 import { SecretSantaEvent } from './entities/secret-santa-event.entity'
 import { Auth } from '@/src/auth/auth-decorator/auth.decorator'
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
-import { CreatorAuthGuard } from '@/src/auth/creator-auth-guard/creator-auth.guard';
+import { OrganizerAuthVerifiedGuard } from '@/src/auth/organizer-auth-guard/organizer-auth-verified.guard';
 
 @ApiTags('Secret Santa Events')
 @ApiBearerAuth()
-@UseGuards(CreatorAuthGuard)
+@UseGuards(OrganizerAuthVerifiedGuard)
 @Controller('secret-santa-events')
 export class SecretSantaEventsController {
   constructor(
@@ -44,7 +44,7 @@ export class SecretSantaEventsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all Secret Santa event for creator' })
+  @ApiOperation({ summary: 'Get all Secret Santa event for organizer' })
   @ApiResponse({ type: [SecretSantaEvent], status: 200 })
   @ApiResponse({ status: 401, description: 'Unauthorized for access Secret Santa event' })
   @ApiResponse({ status: 406, description: 'Has not access for Secret Santa event' })
@@ -66,7 +66,7 @@ export class SecretSantaEventsController {
   ): Promise<SecretSantaEvent> {
     const secretSantaEvent = await this.secretSantaEventsService.findOne(publicId);
 
-    if (secretSantaEvent.creatorPublicId !== auth.publicId) {
+    if (secretSantaEvent.organizerPublicId !== auth.publicId) {
       throw new NotAcceptableException('Has not access for Secret Santa event');
     }
 

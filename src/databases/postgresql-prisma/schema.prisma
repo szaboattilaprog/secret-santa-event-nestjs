@@ -20,14 +20,15 @@ model Seed {
   @@schema("base")
 }
 
-model Creator {
-  id        Int                @id @default(autoincrement())
-  publicId  String             @unique @default(uuid()) @db.Uuid
-  name      String
-  email     String             @unique
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
-  events    SecretSantaEvent[]
+model Organizer {
+  id          Int                @id @default(autoincrement())
+  publicId    String             @unique @default(uuid()) @db.Uuid
+  name        String
+  email       String             @unique
+  otpVerified Boolean            @default(false)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  events      SecretSantaEvent[]
 
   @@schema("account")
 }
@@ -41,8 +42,8 @@ model SecretSantaEvent {
   eventBeginAt          DateTime
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
-  creator               Creator        @relation(fields: [creatorPublicId], references: [publicId])
-  creatorPublicId       String         @db.Uuid
+  organizer             Organizer      @relation(fields: [organizerPublicId], references: [publicId])
+  organizerPublicId     String         @db.Uuid
   participants          Participant[]
   chats                 AnonimChat[]
   giftWishlists         GiftWishlist[]
@@ -76,16 +77,16 @@ model Participant {
 }
 
 model AnonimChat {
-  id                         Int                 @id @default(autoincrement())
-  publicId                   String              @unique @default(uuid()) @db.Uuid
-  topic                      String              @unique @db.VarChar(255)
-  creatorParticipant         Participant         @relation(fields: [creatorParticipantPublicId], references: [publicId])
-  creatorParticipantPublicId String              @db.Uuid
-  messages                   AnonimChatMessage[]
-  createdAt                  DateTime            @default(now())
-  updatedAt                  DateTime            @updatedAt
-  event                      SecretSantaEvent    @relation(fields: [eventPublicId], references: [publicId])
-  eventPublicId              String              @db.Uuid
+  id                  Int                 @id @default(autoincrement())
+  publicId            String              @unique @default(uuid()) @db.Uuid
+  topic               String              @unique @db.VarChar(255)
+  participant         Participant         @relation(fields: [participantPublicId], references: [publicId])
+  participantPublicId String              @db.Uuid
+  messages            AnonimChatMessage[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  event               SecretSantaEvent    @relation(fields: [eventPublicId], references: [publicId])
+  eventPublicId       String              @db.Uuid
 
   @@schema("event")
 }

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { AppMailerService } from '@/src/app-mailer/app-mailer.service';
+import { OtpService } from '@/src/common/otp/otp.service';
 
 @Global()
 @Module({
@@ -29,11 +30,19 @@ import { AppMailerService } from '@/src/app-mailer/app-mailer.service';
             strict: true,
           },
         },
+        options: {
+          partials: {
+            dir: join(__dirname, 'templates', 'partials'),
+            options: {
+              strict: true,
+            },
+          },
+        },
       }),
       inject: [ConfigService],
     }),
   ],
-  providers: [AppMailerService],
+  providers: [AppMailerService, OtpService],
   exports: [AppMailerService],
 })
 export class AppMailerModule {}

@@ -13,15 +13,15 @@ export class SecretSantaEventsService {
   ) {
   }
 
-  async create(creatorPublicId: string, createSecretSantaEventDto: CreateSecretSantaEventDto): Promise<SecretSantaEvent> {
-    const secretSantaEvent = await this.secretSantaEventsRepository.create(creatorPublicId, createSecretSantaEventDto);
+  async create(organizerPublicId: string, createSecretSantaEventDto: CreateSecretSantaEventDto): Promise<SecretSantaEvent> {
+    const secretSantaEvent = await this.secretSantaEventsRepository.create(organizerPublicId, createSecretSantaEventDto);
     delete secretSantaEvent.id;
 
     return secretSantaEvent;
   }
 
-  async findAll(creatorPublicId: string): Promise<SecretSantaEvent[]> {
-    const secretSantaEvents = await this.secretSantaEventsRepository.findAll(creatorPublicId);
+  async findAll(organizerPublicId: string): Promise<SecretSantaEvent[]> {
+    const secretSantaEvents = await this.secretSantaEventsRepository.findAll(organizerPublicId);
 
     return secretSantaEvents.map(secretSantaEvent => {
       delete secretSantaEvent.id;
@@ -40,8 +40,8 @@ export class SecretSantaEventsService {
     return secretSantaEvent;
   }
 
-  async update(creatorPublicId: string, publicId: string, updateSecretSantaEventDto: UpdateSecretSantaEventDto): Promise<SecretSantaEvent> {
-    const secretSantaEvent = await this.secretSantaEventsRepository.update(creatorPublicId, publicId, updateSecretSantaEventDto);
+  async update(organizerPublicId: string, publicId: string, updateSecretSantaEventDto: UpdateSecretSantaEventDto): Promise<SecretSantaEvent> {
+    const secretSantaEvent = await this.secretSantaEventsRepository.update(organizerPublicId, publicId, updateSecretSantaEventDto);
 
     if (!secretSantaEvent) {
       throw new NotFoundException('Secret Santa event not found');
@@ -54,14 +54,14 @@ export class SecretSantaEventsService {
 
     if (secretSantaEvent.settedAllParticipants && (secretSantaEvent.participants.length < 4 || secretSantaEvent.participants.length % 2 !== 0)) {
       secretSantaEvent.settedAllParticipants = false;
-      await this.secretSantaEventsRepository.update(creatorPublicId, publicId, { settedAllParticipants: false });
+      await this.secretSantaEventsRepository.update(organizerPublicId, publicId, { settedAllParticipants: false });
       throw new BadRequestException('Participants must be at least 4 and must be even number of elements when setted all participants');
     }
 
     return secretSantaEvent;
   }
 
-  async remove(creatorPublicId: string, publicId: string) {
-    this.secretSantaEventsRepository.remove(creatorPublicId, publicId);
+  async remove(organizerPublicId: string, publicId: string) {
+    this.secretSantaEventsRepository.remove(organizerPublicId, publicId);
   }
 }

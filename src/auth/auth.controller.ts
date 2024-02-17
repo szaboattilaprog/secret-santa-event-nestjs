@@ -5,7 +5,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthService } from '@/src/auth/auth.service';
-import { CreateCreatorAuthDto } from '@/src/auth/dto/create-creator-auth.dto';
+import { CreateOrganizerAuthDto } from '@/src/auth/dto/create-organizer-auth.dto';
 import { CreatePartcipantAuthDto } from '@/src/auth/dto/create-partcipant-auth.dto';
 import { IsPublic } from '@/src/auth/is-public-decorator/is-public.decorator';
 import { RefreshToken } from '@/src/auth/refresh-token-decorator/refresh-token.decorator';
@@ -17,15 +17,15 @@ export class AuthController {
   readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
-  @Get('refresh-creator-token')
+  @Get('refresh-organizer-token')
   @IsPublic()
-  @ApiOperation({ summary: 'Refresh access-token for Creator of secret Santa event' })
+  @ApiOperation({ summary: 'Refresh access-token for Organizer of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
   @ApiResponse({ status: 401, description: 'Unauthorized for access' })
-  refreshCreatorToken(
+  refreshOrganizerToken(
     @RefreshToken() refreshToken: string
   ) {
-    return this.authService.refreshCreatorToken(refreshToken);
+    return this.authService.refreshOrganizerToken(refreshToken);
   }
 
   @Get('refresh-partcipant-token')
@@ -39,13 +39,13 @@ export class AuthController {
     return this.authService.refreshPartcipantToken(refreshToken);
   }
 
-  @Post('creator-auth')
+  @Post('organizer-auth')
   @IsPublic()
-  @ApiOperation({ summary: 'Create an access-token for Creator of secret Santa event' })
+  @ApiOperation({ summary: 'Create an access-token for Organizer of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
-  @ApiResponse({ status: 404, description: 'Creator not found by public id' })
-  createJwtByCreatorPublicId(@Body() createCreatorAuthDto: CreateCreatorAuthDto) {
-    return this.authService.createJwtByCreatorPublicId(createCreatorAuthDto.publicId);
+  @ApiResponse({ status: 404, description: 'Organizer not found by public id' })
+  createJwtByOrganizerPublicId(@Body() createOrganizerAuthDto: CreateOrganizerAuthDto) {
+    return this.authService.createJwtByOrganizerPublicId(createOrganizerAuthDto.publicId);
   }
 
   @Post('partcipant-auth')

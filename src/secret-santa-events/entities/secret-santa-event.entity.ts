@@ -38,7 +38,7 @@ export class SecretSantaEvent implements prisma.SecretSantaEvent {
   @IsDate()
   readonly updatedAt: Date
 
-  @ApiProperty({ description: 'The public id of sectret Santa event creator.', readOnly: true })
+  @ApiProperty({ description: 'The public id of sectret Santa event organizer.', readOnly: true })
   @IsUUID()
-  readonly creatorPublicId: string
+  readonly organizerPublicId: string
 }

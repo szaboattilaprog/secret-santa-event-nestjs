@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AnonimChatMessagesRepository } from '@/src/anonim-chat-messages/entities/repositories/anonim-chat-messages-repository/anonim-chat-messages-repository';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
+import { AnonimChatMessagesRepository } from '@/src/anonim-chat-messages/entities/repositories/anonim-chat-messages-repository/anonim-chat-messages-repository';
 
 describe('AnonimChatMessagesRepository', () => {
   let repository: AnonimChatMessagesRepository;

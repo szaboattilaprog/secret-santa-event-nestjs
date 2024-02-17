@@ -3,12 +3,12 @@ import { Observable } from 'rxjs';
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
 
 @Injectable()
-export class CreatorAuthGuard implements CanActivate {
+export class OrganizerAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest<{ auth: AccessAuth}>();
-    if (!request.auth || request.auth.publicIdType !== 'creator') {
+    if (!request.auth || request.auth.publicIdType !== 'organizer') {
       throw new NotAcceptableException();
     }
 

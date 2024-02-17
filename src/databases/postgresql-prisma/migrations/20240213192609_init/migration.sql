@@ -8,7 +8,7 @@ CREATE SCHEMA IF NOT EXISTS "base";
 CREATE SCHEMA IF NOT EXISTS "event";
 
 -- CreateTable
-CREATE TABLE "account"."Creator" (
+CREATE TABLE "account"."Organizer" (
     "id" SERIAL NOT NULL,
     "publicId" UUID NOT NULL,
     "name" TEXT NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE "account"."Creator" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Creator_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Organizer_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -30,7 +30,7 @@ CREATE TABLE "event"."SecretSantaEvent" (
     "eventBeginAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "creatorPublicId" UUID NOT NULL,
+    "organizerPublicId" UUID NOT NULL,
 
     CONSTRAINT "SecretSantaEvent_pkey" PRIMARY KEY ("id")
 );
@@ -65,7 +65,7 @@ CREATE TABLE "event"."AnonimChat" (
     "id" SERIAL NOT NULL,
     "publicId" UUID NOT NULL,
     "topic" VARCHAR(255) NOT NULL,
-    "creatorPublicId" UUID NOT NULL,
+    "organizerPublicId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "eventPublicId" UUID NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE "event"."_ParticipantToSecretSantaEvent" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Creator_publicId_key" ON "account"."Creator"("publicId");
+CREATE UNIQUE INDEX "Organizer_publicId_key" ON "account"."Organizer"("publicId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SecretSantaEvent_publicId_key" ON "event"."SecretSantaEvent"("publicId");
@@ -155,7 +155,7 @@ CREATE UNIQUE INDEX "_ParticipantToSecretSantaEvent_AB_unique" ON "event"."_Part
 CREATE INDEX "_ParticipantToSecretSantaEvent_B_index" ON "event"."_ParticipantToSecretSantaEvent"("B");
 
 -- AddForeignKey
-ALTER TABLE "event"."SecretSantaEvent" ADD CONSTRAINT "SecretSantaEvent_creatorPublicId_fkey" FOREIGN KEY ("creatorPublicId") REFERENCES "account"."Creator"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "event"."SecretSantaEvent" ADD CONSTRAINT "SecretSantaEvent_organizerPublicId_fkey" FOREIGN KEY ("organizerPublicId") REFERENCES "account"."Organizer"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "event"."GiftPair" ADD CONSTRAINT "GiftPair_giverPublicId_fkey" FOREIGN KEY ("giverPublicId") REFERENCES "event"."Participant"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -167,7 +167,7 @@ ALTER TABLE "event"."GiftPair" ADD CONSTRAINT "GiftPair_receiverPublicId_fkey" F
 ALTER TABLE "event"."GiftPair" ADD CONSTRAINT "GiftPair_eventPublicId_fkey" FOREIGN KEY ("eventPublicId") REFERENCES "event"."SecretSantaEvent"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "event"."AnonimChat" ADD CONSTRAINT "AnonimChat_creatorPublicId_fkey" FOREIGN KEY ("creatorPublicId") REFERENCES "event"."Participant"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "event"."AnonimChat" ADD CONSTRAINT "AnonimChat_organizerPublicId_fkey" FOREIGN KEY ("organizerPublicId") REFERENCES "event"."Participant"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "event"."AnonimChat" ADD CONSTRAINT "AnonimChat_eventPublicId_fkey" FOREIGN KEY ("eventPublicId") REFERENCES "event"."SecretSantaEvent"("publicId") ON DELETE RESTRICT ON UPDATE CASCADE;

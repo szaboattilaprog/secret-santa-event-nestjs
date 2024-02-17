@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreatorsRepository } from '@/src/creators/entities/repositories/creators-repository/creators-repository';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
+import { OrganizersRepository } from '@/src/organizers/entities/repositories/organizers-repository/organizers-repository';
 
-describe('CreatorsRepository', () => {
-  let repository: CreatorsRepository;
+describe('OrganizersRepository', () => {
+  let repository: OrganizersRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CreatorsRepository, PostgresqlPrismaService],
+      providers: [OrganizersRepository, PostgresqlPrismaService],
     }).compile();
 
-    repository = module.get<CreatorsRepository>(CreatorsRepository);
+    repository = module.get<OrganizersRepository>(OrganizersRepository);
   });
 
   it('should be defined', () => {

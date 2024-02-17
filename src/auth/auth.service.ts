@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { CreatorsService } from '@/src/creators/creators.service';
+import { OrganizersService } from '@/src/organizers/organizers.service';
 import { ParticipantsService } from '@/src/participants/participants.service';
 import { AccessToken } from '@/src/auth/entities/access-token.entity';
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
@@ -12,17 +12,17 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    private creatorsService: CreatorsService,
+    private organizersService: OrganizersService,
     private participantsService: ParticipantsService,
   ) {}
 
-  async refreshCreatorToken(refreshToken: string): Promise<AccessToken> {
+  async refreshOrganizerToken(refreshToken: string): Promise<AccessToken> {
     const payload: AccessAuth = await this.decodeToken(refreshToken);
-    if (payload.publicIdType !== 'creator') {
+    if (payload.publicIdType !== 'organizer') {
       throw new UnauthorizedException();
     }
     
-    return this.createJwtByCreatorPublicId(payload.publicId);
+    return this.createJwtByOrganizerPublicId(payload.publicId);
   }
 
   async refreshPartcipantToken(refreshToken: string): Promise<AccessToken> {
@@ -35,12 +35,12 @@ export class AuthService {
   }
 
 
-  async createJwtByCreatorPublicId(creatorPublicId: string): Promise<AccessToken> {
-    const creator = await this.creatorsService.findOne(creatorPublicId);
-    if (!creator) {
+  async createJwtByOrganizerPublicId(organizerPublicId: string): Promise<AccessToken> {
+    const organizer = await this.organizersService.findOne(organizerPublicId);
+    if (!organizer) {
       throw new NotFoundException();
     }
-    const payload = { publicId: creator.publicId, publicIdType: 'creator' };
+    const payload = { publicId: organizer.publicId, publicIdType: 'organizer' };
     return {
       accessToken: await this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_SECRET'),

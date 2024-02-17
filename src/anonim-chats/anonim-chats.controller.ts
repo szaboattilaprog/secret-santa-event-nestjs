@@ -62,7 +62,7 @@ export class AnonimChatsController {
     @Param('publicId') publicId: string
   ): Promise<AnonimChat> {
     const anonimChat = await this.anonimChatsService.findOne(publicId);
-    if (anonimChat.creatorParticipantPublicId !== auth.publicId) {
+    if (anonimChat.participantPublicId !== auth.publicId) {
       throw new NotAcceptableException('Has not access for Anonim Chat');
     }
 

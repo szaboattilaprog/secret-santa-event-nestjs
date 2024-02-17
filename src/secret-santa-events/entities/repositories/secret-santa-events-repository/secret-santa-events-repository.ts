@@ -13,12 +13,12 @@ export class SecretSantaEventsRepository {
     private readonly postgresqlPrismaService: PostgresqlPrismaService,
   ) {}
 
-  async create(creatorPublicId: string, createSecretSantaEventDto: CreateSecretSantaEventDto): Promise<SecretSantaEvent> {
+  async create(organizerPublicId: string, createSecretSantaEventDto: CreateSecretSantaEventDto): Promise<SecretSantaEvent> {
     return this.postgresqlPrismaService.secretSantaEvent.create({
       data: {
         ...createSecretSantaEventDto,
-        creator: {
-          connect: { publicId: creatorPublicId }
+        organizer: {
+          connect: { publicId: organizerPublicId }
         }
       }
     });
@@ -52,21 +52,21 @@ export class SecretSantaEventsRepository {
     return secretSantaEvent.participants;
   }
 
-  async findAll(creatorPublicId: string): Promise<SecretSantaEvent[]> {
+  async findAll(organizerPublicId: string): Promise<SecretSantaEvent[]> {
     return this.postgresqlPrismaService.secretSantaEvent.findMany({
       where: {
-        creatorPublicId
+        organizerPublicId
       }
     });
   }
 
-  async findOne(publicId: string): Promise<SecretSantaEvent & { creator: { email: string, name: string } }> {
+  async findOne(publicId: string): Promise<SecretSantaEvent & { organizer: { email: string, name: string } }> {
     return this.postgresqlPrismaService.secretSantaEvent.findFirst({
       where: {
         publicId
       },
       include: {
-        creator: {
+        organizer: {
           select: {
             email: true,
             name: true,
@@ -76,11 +76,11 @@ export class SecretSantaEventsRepository {
     });
   }
 
-  async update(creatorPublicId: string, publicId: string, updateSecretSantaEventDto: UpdateSecretSantaEventDto): Promise<SecretSantaEvent & { participants: Participant[] }> {
+  async update(organizerPublicId: string, publicId: string, updateSecretSantaEventDto: UpdateSecretSantaEventDto): Promise<SecretSantaEvent & { participants: Participant[] }> {
     return this.postgresqlPrismaService.secretSantaEvent.update({
       where: {
         publicId,
-        creatorPublicId
+        organizerPublicId
       },
       data: updateSecretSantaEventDto,
       include: {
@@ -89,11 +89,11 @@ export class SecretSantaEventsRepository {
     });
   }
 
-  async remove(creatorPublicId: string, publicId: string) {
+  async remove(organizerPublicId: string, publicId: string) {
     this.postgresqlPrismaService.secretSantaEvent.delete({
       where: {
         publicId,
-        creatorPublicId
+        organizerPublicId
       }
     });
   }

@@ -5,9 +5,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from '@/src/auth/auth.service';
 import { AuthController } from '@/src/auth/auth.controller';
 import { JwtAuthGuard } from '@/src/auth/jwt-auth-guard/jwt-auth.guard';
-import { CreatorAuthGuard } from '@/src/auth/creator-auth-guard/creator-auth.guard';
+import { OrganizerAuthGuard } from '@/src/auth/organizer-auth-guard/organizer-auth.guard';
+import { OrganizerAuthVerifiedGuard } from '@/src/auth/organizer-auth-guard/organizer-auth-verified.guard';
 import { ParticipantAuthGuard } from '@/src/auth/participant-auth-guard/participant-auth.guard';
-import { CreatorsModule } from '@/src/creators/creators.module';
+import { OrganizersModule } from '@/src/organizers/organizers.module';
 import { ParticipantsModule } from '@/src/participants/participants.module';
 
 @Global()
@@ -21,7 +22,7 @@ import { ParticipantsModule } from '@/src/participants/participants.module';
       }),
       inject: [ConfigService],
     }),
-    CreatorsModule,
+    OrganizersModule,
     ParticipantsModule,
   ],
   controllers: [AuthController],
@@ -31,7 +32,8 @@ import { ParticipantsModule } from '@/src/participants/participants.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    CreatorAuthGuard,
+    OrganizerAuthGuard,
+    OrganizerAuthVerifiedGuard,
     ParticipantAuthGuard,
   ],
   exports: [AuthService],

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { OrganizersModule } from '@/src/organizers/organizers.module';
 import { ParticipantsService } from '@/src/participants/participants.service';
 import { ParticipantsController } from '@/src/participants/participants.controller';
 import { PostgresqlPrismaModule } from '@/src/databases/postgresql-prisma/postgresql-prisma.module';
@@ -7,7 +8,7 @@ import { MakeGiftPairsListener } from '@/src/participants/make-gift-pairs-listen
 import { SecretSantaEventsModule } from '@/src/secret-santa-events/secret-santa-events.module';
 
 @Module({
-  imports: [PostgresqlPrismaModule, SecretSantaEventsModule],
+  imports: [PostgresqlPrismaModule, SecretSantaEventsModule, OrganizersModule],
   controllers: [ParticipantsController],
   providers: [ParticipantsService, ParticipantsRepository, MakeGiftPairsListener],
   exports: [ParticipantsService],

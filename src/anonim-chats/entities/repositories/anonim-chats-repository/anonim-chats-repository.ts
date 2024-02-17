@@ -16,15 +16,15 @@ export class AnonimChatsRepository {
     return this.postgresqlPrismaService.anonimChat.create({ data: createAnonimChatDto });
   }
 
-  async findAll(creatorParticipantPublicId: string): Promise<AnonimChat[]> {
-    return this.postgresqlPrismaService.anonimChat.findMany({ where: { creatorParticipantPublicId } });
+  async findAll(participantPublicId: string): Promise<AnonimChat[]> {
+    return this.postgresqlPrismaService.anonimChat.findMany({ where: { participantPublicId } });
   }
 
   async findOne(publicId: string): Promise<AnonimChat> {
     return this.postgresqlPrismaService.anonimChat.findUnique({ where: { publicId } });
   }
 
-  async update(creatorParticipantPublicId: string, publicId: string, updateAnonimChatDto: UpdateAnonimChatDto): Promise<AnonimChat> {
-    return this.postgresqlPrismaService.anonimChat.update({ where: { publicId, creatorParticipantPublicId }, data: updateAnonimChatDto });
+  async update(participantPublicId: string, publicId: string, updateAnonimChatDto: UpdateAnonimChatDto): Promise<AnonimChat> {
+    return this.postgresqlPrismaService.anonimChat.update({ where: { publicId, participantPublicId }, data: updateAnonimChatDto });
   }
 }

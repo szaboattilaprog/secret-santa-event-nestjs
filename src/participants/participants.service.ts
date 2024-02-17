@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreateParticipantDto } from '@/src/participants/dto/create-participant.dto';
-import { UpdateByCreatorParticipantDto } from '@/src/participants/dto/update-by-creator-participant.dto';
+import { UpdateByOrganizerParticipantDto } from '@/src/participants/dto/update-by-organizer-participant.dto';
 import { UpdateParticipantDto } from '@/src/participants/dto/update-participant.dto';
 import { FindAllParticipantDto } from '@/src/participants/dto/find-all-participant.dto';
 import { ParticipantsRepository } from '@/src/participants/entities/repositories/participants-repository/participants-repository';
@@ -60,7 +60,7 @@ export class ParticipantsService {
     return paricipant;
   }
 
-  async update(publicId: string, updateParticipantDto: UpdateParticipantDto | UpdateByCreatorParticipantDto): Promise<Participant> {
+  async update(publicId: string, updateParticipantDto: UpdateParticipantDto | UpdateByOrganizerParticipantDto): Promise<Participant> {
     const paricipant = await this.participantsRepository.update(publicId, updateParticipantDto);
     if (!paricipant) {
       throw new NotFoundException('Participant not found by public id');

@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MAILER_OPTIONS } from '@nestjs-modules/mailer';
-import { AppMailerService } from '@/src/app-mailer/app-mailer.service';
 import { MailerService } from '@nestjs-modules/mailer';
+import { MAILER_OPTIONS } from '@nestjs-modules/mailer';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
+import { AppMailerService } from '@/src/app-mailer/app-mailer.service';
+import { OtpService } from '@/src/common/otp/otp.service';
 
 describe('MailerService', () => {
   let service: AppMailerService;
@@ -13,36 +15,20 @@ describe('MailerService', () => {
         AppMailerService, 
         MailerService, 
         ConfigService,
+        OtpService,
         {
           provide: MAILER_OPTIONS,
-          useFactory: () => ({
-            defaults: {},
-            transport: {},
-            transports: {
-              default: {
-                  host: 'smtp.example.com',
-                  port: 587,
-                  secure: false,
-                  auth: {
-                      user: '',
-                      pass: '',
-                  },
-              },
-              template: {
-                  dir: 'src/templates',
-                  adapter: undefined,
-                  options: {
-                      strict: true,
-                  }
-              },
-              options: {
-                  partials: {},
-                  helpers: {},
-                  compilerOptions: {},
-              },
-              preview: false,
+          useValue: {
+            transport: {
+              host: 'smtp.example.com',
+              port: 587,
+              secure: false,
             }
-          })
+          }
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: Cache,
         },
       ],
     }).compile();

@@ -17,10 +17,10 @@ import {
 } from '@nestjs/swagger';
 import { ParticipantsService } from '@/src/participants/participants.service';
 import { CreateParticipantDto } from '@/src/participants/dto/create-participant.dto';
-import { UpdateByCreatorParticipantDto } from '@/src/participants/dto/update-by-creator-participant.dto';
+import { UpdateByOrganizerParticipantDto } from '@/src/participants/dto/update-by-organizer-participant.dto';
 import { UpdateParticipantDto } from '@/src/participants/dto/update-participant.dto';
 import { FindAllParticipantDto } from '@/src/participants/dto/find-all-participant.dto';
-import { CreatorAuthGuard } from '@/src/auth/creator-auth-guard/creator-auth.guard';
+import { OrganizerAuthVerifiedGuard } from '@/src/auth/organizer-auth-guard/organizer-auth-verified.guard';
 import { ParticipantAuthGuard } from '@/src/auth/participant-auth-guard/participant-auth.guard';
 import { Auth } from '@/src/auth/auth-decorator/auth.decorator'
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
@@ -33,7 +33,7 @@ export class ParticipantsController {
   constructor(private readonly participantsService: ParticipantsService) {}
 
   @Post()
-  @UseGuards(CreatorAuthGuard)
+  @UseGuards(OrganizerAuthVerifiedGuard)
   @ApiOperation({ summary: 'Create a participant' })
   @ApiResponse({ type: Participant, status: 201 })
   @ApiResponse({ status: 400, description: 'Error creating Participant' })
@@ -46,7 +46,7 @@ export class ParticipantsController {
   }
 
   @Get()
-  @UseGuards(CreatorAuthGuard)
+  @UseGuards(OrganizerAuthVerifiedGuard)
   @ApiOperation({ summary: 'Get all participants for Secret Sante event' })
   @ApiResponse({ type: [Participant], status: 200 })
   @ApiResponse({ status: 401, description: 'Unauthorized for access get Participant' })
@@ -81,18 +81,18 @@ export class ParticipantsController {
     return participant;
   }
 
-  @Patch(':publicId/by-creator')
-  @ApiOperation({ summary: 'Update a participant by creator for Secret Sante event' })
-  @UseGuards(CreatorAuthGuard)
+  @Patch(':publicId/by-organizer')
+  @ApiOperation({ summary: 'Update a participant by organizer for Secret Sante event' })
+  @UseGuards(OrganizerAuthVerifiedGuard)
   @ApiResponse({ type: Participant, status: 200 })
   @ApiResponse({ status: 404, description: 'Participant not found by public id' })
   @ApiResponse({ status: 401, description: 'Unauthorized for access update Participant' })
   @ApiResponse({ status: 406, description: 'Has not access for update Participant' })
-  updateByCreator(
+  updateByOrganizer(
     @Param('publicId') publicId: string,
-    @Body() updateByCreatorParticipantDto: UpdateByCreatorParticipantDto,
+    @Body() updateByOrganizerParticipantDto: UpdateByOrganizerParticipantDto,
   ): Promise<Participant> {
-    return this.participantsService.update(publicId, updateByCreatorParticipantDto);
+    return this.participantsService.update(publicId, updateByOrganizerParticipantDto);
   }
 
   @Patch(':publicId')
@@ -111,7 +111,7 @@ export class ParticipantsController {
 
   @Delete(':publicId')
   @ApiOperation({ summary: 'Delete a participant for Secret Sante event' })
-  @UseGuards(CreatorAuthGuard)
+  @UseGuards(OrganizerAuthVerifiedGuard)
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Participant not found by public id' })
   @ApiResponse({ status: 401, description: 'Unauthorized for access delete Participant' })

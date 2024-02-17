@@ -1,14 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtAuthGuard } from '@/src/auth/jwt-auth-guard/jwt-auth.guard';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from '@/src/auth/auth.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { MAILER_OPTIONS } from '@nestjs-modules/mailer';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { CreatorsService } from '@/src/creators/creators.service';
-import { ParticipantsService } from '@/src/participants/participants.service';
-import { CreatorsRepository } from '@/src/creators/entities/repositories/creators-repository/creators-repository';
-import { ParticipantsRepository } from '@/src/participants/entities/repositories/participants-repository/participants-repository';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
+import { AppMailerService } from '@/src/app-mailer/app-mailer.service';
+import { OtpService } from '@/src/common/otp/otp.service';
+import { AuthService } from '@/src/auth/auth.service';
+import { OrganizersService } from '@/src/organizers/organizers.service';
+import { ParticipantsService } from '@/src/participants/participants.service';
+import { JwtAuthGuard } from '@/src/auth/jwt-auth-guard/jwt-auth.guard';
+import { OrganizersRepository } from '@/src/organizers/entities/repositories/organizers-repository/organizers-repository';
+import { ParticipantsRepository } from '@/src/participants/entities/repositories/participants-repository/participants-repository';
 
 describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
@@ -16,16 +21,33 @@ describe('JwtAuthGuard', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        JwtAuthGuard, 
-        Reflector, 
-        AuthService, 
+        JwtAuthGuard,
+        Reflector,
+        MailerService, 
         ConfigService, 
         JwtService, 
-        CreatorsService,
+        PostgresqlPrismaService,
+        AppMailerService,
+        OtpService,
+        AuthService, 
+        OrganizersService,
         ParticipantsService, 
-        CreatorsRepository, 
+        OrganizersRepository, 
         ParticipantsRepository, 
-        PostgresqlPrismaService
+        {
+          provide: MAILER_OPTIONS,
+          useValue: {
+            transport: {
+              host: 'smtp.example.com',
+              port: 587,
+              secure: false,
+            }
+          }
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: Cache,
+        },
       ],
     }).compile();
 

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GiftWishlistsRepository } from '@/src/gift-wishlists/entities/repositories/gift-wishlists-repository/gift-wishlists-repository';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
+import { GiftWishlistsRepository } from '@/src/gift-wishlists/entities/repositories/gift-wishlists-repository/gift-wishlists-repository';
 
 describe('GiftWishlistsRepository', () => {
   let repository: GiftWishlistsRepository;

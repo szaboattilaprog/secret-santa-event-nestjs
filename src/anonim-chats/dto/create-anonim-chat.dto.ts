@@ -8,9 +8,9 @@ export class CreateAnonimChatDto {
   @Length(1, 255)
   topic: string
 
-  @ApiProperty({ description: 'The public id of the creator participant', required: true })
+  @ApiProperty({ description: 'The public id of the organizer participant', required: true })
   @IsUUID()
-  creatorParticipantPublicId: string
+  participantPublicId: string
 
   @ApiProperty({ description: 'The public id of the Secret Santa Event', required: true })
   @IsUUID()

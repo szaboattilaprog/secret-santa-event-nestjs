@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
 import { CreateParticipantDto } from '@/src/participants/dto/create-participant.dto';
 import { FindAllParticipantDto } from '@/src/participants/dto/find-all-participant.dto';
-import { UpdateByCreatorParticipantDto } from '@/src/participants/dto/update-by-creator-participant.dto';
+import { UpdateByOrganizerParticipantDto } from '@/src/participants/dto/update-by-organizer-participant.dto';
 import { UpdateParticipantDto } from '@/src/participants/dto/update-participant.dto';
 import { Participant } from '@/src/participants/entities/participant.entity';
 
@@ -69,7 +69,7 @@ export class ParticipantsRepository {
     });
   }
 
-  async update(publicId: string, updateParticipantDto: UpdateParticipantDto | UpdateByCreatorParticipantDto): Promise<Participant> {
+  async update(publicId: string, updateParticipantDto: UpdateParticipantDto | UpdateByOrganizerParticipantDto): Promise<Participant> {
     this.logger.log(`Updating participant with publicId: ${publicId}`);
     return this.postgresqlPrismaService.participant.update({
       where: {
