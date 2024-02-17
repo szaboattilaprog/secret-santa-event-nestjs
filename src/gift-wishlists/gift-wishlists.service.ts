@@ -57,6 +57,12 @@ export class GiftWishlistsService {
   }
 
   async remove(participantPublicId: string, publicId: string) {
+    const giftWishlist = await this.giftWishlistsRepository.findOne(publicId);
+
+    if (!giftWishlist) {
+      throw new NotFoundException('GiftWishlist not found');
+    }
+
     return this.giftWishlistsRepository.remove(participantPublicId, publicId);
   }
 }

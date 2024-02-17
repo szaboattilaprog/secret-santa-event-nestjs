@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { MailerService } from '@nestjs-modules/mailer';
 import { MAILER_OPTIONS } from '@nestjs-modules/mailer';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
@@ -12,29 +11,33 @@ import { OtpService } from '@/src/common/otp/otp.service';
 import { AuthService } from '@/src/auth/auth.service';
 import { OrganizersService } from '@/src/organizers/organizers.service';
 import { ParticipantsService } from '@/src/participants/participants.service';
-import { AuthController } from '@/src/auth/auth.controller';
+import { SecretSantaEventsService } from '@/src/secret-santa-events/secret-santa-events.service';
+import { SecretSantaEventCountDownTimerGateway } from '@/src/secret-santa-events/secret-santa-event-cont-down-timer.gateway';
+import { SecretSantaEventsRepository } from '@/src/secret-santa-events/entities/repositories/secret-santa-events-repository/secret-santa-events-repository';
 import { OrganizersRepository } from '@/src/organizers/entities/repositories/organizers-repository/organizers-repository';
 import { ParticipantsRepository } from '@/src/participants/entities/repositories/participants-repository/participants-repository';
 
-describe('AuthController (e2e)', () => {
-  let app: INestApplication;
-  let authService = { createJwtByOrganizerPublicId: jest.fn(() => 'accessToken' ) };
+describe('AnonimChatMessagesGateway', () => {
+  let gateway: SecretSantaEventCountDownTimerGateway;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ConfigService, 
-        JwtService, 
+        SecretSantaEventCountDownTimerGateway,
+        EventEmitter2,
         MailerService,
+        ConfigService,
+        JwtService,
         PostgresqlPrismaService,
         AppMailerService,
         OtpService,
-        AuthService, 
-        OrganizersService, 
-        ParticipantsService, 
-        OrganizersRepository, 
-        ParticipantsRepository, 
+        AuthService,
+        OrganizersService,
+        ParticipantsService,
+        SecretSantaEventsService,
+        SecretSantaEventsRepository,
+        OrganizersRepository,
+        ParticipantsRepository,
         {
           provide: MAILER_OPTIONS,
           useValue: {
@@ -49,21 +52,13 @@ describe('AuthController (e2e)', () => {
           provide: CACHE_MANAGER,
           useValue: Cache,
         },
-      ]
-    })
-    .overrideProvider(AuthService)
-    .useValue(authService)
-    .compile();
+      ],
+    }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    gateway = module.get<SecretSantaEventCountDownTimerGateway>(SecretSantaEventCountDownTimerGateway);
   });
 
-  it('/auth/organizer-auth (POST)', () => {
-    return request(app.getHttpServer())
-      .post('/auth/organizer-auth')
-      .send({ publicId: '52807360-991e-4945-85f8-910a6b6d2328' })
-      .expect(201)
-      .expect('accessToken');
+  it('should be defined', () => {
+    expect(gateway).toBeDefined();
   });
 });

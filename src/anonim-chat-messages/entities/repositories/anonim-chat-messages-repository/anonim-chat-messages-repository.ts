@@ -27,6 +27,13 @@ export class AnonimChatMessagesRepository {
       where: {
         ...findAllAnonimChatMessageDto,
       },
+      include: {
+        chat: {
+          select: {
+            topic: true,
+          },
+        },
+      },
     });
   }
 }

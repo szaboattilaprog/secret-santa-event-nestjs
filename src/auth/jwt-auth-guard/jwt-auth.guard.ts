@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '@/src/auth/auth.service';
@@ -6,6 +6,7 @@ import { IS_PUBLIC_KEY } from '@/src/auth/is-public-decorator/is-public.decorato
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
+  //private readonly logger = new Logger(JwtAuthGuard.name);
   constructor(private reflector: Reflector, private authService: AuthService) {
     super()
   }
@@ -35,6 +36,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
+    //this.logger.log('Extracting token from header', request.headers);
     const [type, token] = request.headers['authorization']?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }

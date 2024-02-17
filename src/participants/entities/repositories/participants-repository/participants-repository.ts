@@ -53,23 +53,51 @@ export class ParticipantsRepository {
         publicId,
       },
       include: {
+        event: {
+          select:{
+            location: true,
+            spendLimit: true,
+            eventBeginAt: true,
+          }
+        },
+        giftWishlists: {
+          select: {
+            name: true,
+            image: true,
+            giftUrl: true,
+          },
+        },
         getFromParticipant: {
           select: {
             name: true,
             email: true,
+            giftWishlists: {
+              select: {
+                name: true,
+                image: true,
+                giftUrl: true,
+              },
+            },
           },
         },
         givesToParticipant: {
           select: {
             name: true,
             email: true,
+            giftWishlists: {
+              select: {
+                name: true,
+                image: true,
+                giftUrl: true,
+              },
+            },
           },
         },
       },
     });
   }
 
-  async update(publicId: string, updateParticipantDto: UpdateParticipantDto | UpdateByOrganizerParticipantDto): Promise<Participant> {
+  async update(publicId: string, updateParticipantDto: UpdateParticipantDto & UpdateByOrganizerParticipantDto & { getFromParticipantPublicId?: string, givesToParticipantPublicId?: string }): Promise<Participant> {
     this.logger.log(`Updating participant with publicId: ${publicId}`);
     return this.postgresqlPrismaService.participant.update({
       where: {
@@ -95,10 +123,11 @@ export class ParticipantsRepository {
     });
   }
 
-  async updateAll(participants: Participant[]) {
+  async updatePairs(participants: Participant[]) {
     this.logger.log(`Updating participants`);
-    return this.postgresqlPrismaService.participant.updateMany({
-      data: participants
+    participants.forEach(participant => {
+      const { publicId, getFromParticipantPublicId, givesToParticipantPublicId } = participant;
+      this.update(publicId, { getFromParticipantPublicId, givesToParticipantPublicId });
     });
   }
 

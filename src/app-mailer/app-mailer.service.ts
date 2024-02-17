@@ -62,7 +62,7 @@ export class AppMailerService {
         organizerName: secretSantaEvent.organizer.name,
         location: secretSantaEvent.location,
         spendLimit: secretSantaEvent.spendLimit,
-        eventBeginAt: dayjs(secretSantaEvent.eventBeginAt).format('YYYY-MM-DD HH:mm::ss'),
+        eventBeginAt: dayjs(secretSantaEvent.eventBeginAt).format('YYYY-MM-DD HH:mm::ss')
       },
     })
   }

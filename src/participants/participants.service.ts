@@ -72,6 +72,11 @@ export class ParticipantsService {
   }
 
   async remove(publicId: string) {
+    const paricipant = await this.participantsRepository.findOne(publicId);
+    if (!paricipant) {
+      throw new NotFoundException('Participant not found by public id');
+    }
+    
     this.participantsRepository.remove(publicId);
   }
 }

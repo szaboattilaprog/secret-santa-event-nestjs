@@ -71,6 +71,17 @@ export class SecretSantaEventsRepository {
             email: true,
             name: true,
           }
+        },
+        participants: {
+          select: {
+            publicId: true,
+            email: true,
+            name: true,
+            sendGiftAt: true,
+            receiveGiftAt: true,
+            getFromParticipantPublicId: true,
+            givesToParticipantPublicId: true,
+          },
         }
       }
     });

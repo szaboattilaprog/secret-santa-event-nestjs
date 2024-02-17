@@ -18,7 +18,7 @@ export class OrganizersRepository {
     });
   }
 
-  async update(publicId: string, updateOrganizerDto: UpdateOrganizerDto & { optVerified?: boolean }): Promise<Organizer|null> {
+  async update(publicId: string, updateOrganizerDto: UpdateOrganizerDto & { otpVerified?: boolean }): Promise<Organizer|null> {
     return this.postgresqlPrismaService.organizer.update({
       where: {
         publicId,

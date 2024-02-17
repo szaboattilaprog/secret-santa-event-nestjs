@@ -28,7 +28,7 @@ export class AuthController {
     return this.authService.refreshOrganizerToken(refreshToken);
   }
 
-  @Get('refresh-partcipant-token')
+  @Get('refresh-participant-token')
   @IsPublic()
   @ApiOperation({ summary: 'Refresh access-token for Partcipant of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
@@ -48,7 +48,7 @@ export class AuthController {
     return this.authService.createJwtByOrganizerPublicId(createOrganizerAuthDto.publicId);
   }
 
-  @Post('partcipant-auth')
+  @Post('participant-auth')
   @IsPublic()
   @ApiOperation({ summary: 'Create an access-token for Partcipant of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })

@@ -6,11 +6,11 @@ export class UpdateByOrganizerParticipantDto {
   @IsString()
   @IsOptional()
   @Length(1, 255)
-  name: string
+  name?: string
 
   @ApiProperty({ example: 'xyz@xyz.xyz', description: 'The email of participant.', required: false })
   @IsString()
   @IsOptional()
   @IsEmail()
-  email: string
+  email?: string
 }

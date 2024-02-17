@@ -14,7 +14,7 @@ export class OrganizersService {
     let organizer = await this.organizersRepository.findOneByEmail(createOrganizerDto.email);
 
     if (organizer) {
-      organizer = await this.organizersRepository.update(organizer.publicId, { optVerified: false });
+      organizer = await this.organizersRepository.update(organizer.publicId, { otpVerified: false });
     } else {
       organizer = await this.organizersRepository.create(createOrganizerDto);
     }
@@ -46,13 +46,12 @@ export class OrganizersService {
       throw new BadRequestException('Not accepted update Organizer when OTP is not verified');
     }
 
-    if (updateOrganizerDto.otp && !await this.otpService.verifyOtp(organizer.email, updateOrganizerDto.otp)) {
-      organizer = await this.organizersRepository.update(organizer.publicId, { optVerified: true });
+    if (updateOrganizerDto.otp && await this.otpService.verifyOtp(organizer.email, updateOrganizerDto.otp)) {
+      organizer = await this.organizersRepository.update(organizer.publicId, { otpVerified: true });
+      delete organizer.id;
+      
       this.appMailerService.sendYouAreOrganizerMail(organizer);
-    }
-
-    if (organizer.otpVerified) {
-      delete updateOrganizerDto.otp;
+    } else if (organizer.otpVerified) {
       organizer = await this.organizersRepository.update(publicId, updateOrganizerDto);
     }
 

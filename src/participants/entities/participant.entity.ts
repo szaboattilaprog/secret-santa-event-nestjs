@@ -1,7 +1,43 @@
 import prisma from '@prisma/client'
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger'
-import { IsUUID, IsString, IsNotEmpty, Length, IsEmail, IsDate, IsOptional, ValidateNested } from 'class-validator'
+import { IsUUID, IsString, IsNotEmpty, Length, IsEmail, IsDate, IsOptional, ValidateNested, IsNumber } from 'class-validator'
 import { Type } from 'class-transformer';
+
+class NestedSecretSantaEvent {
+  @ApiProperty({ example: 'Budapest XV somewhere', description: 'The localtion of sectret Santa event.', required: true })
+  @IsString()
+  @IsNotEmpty()
+  @Length(1, 255)
+  location: string
+
+  @ApiProperty({ example: 2000, description: 'The spend limit for sectret Santa event.', required: true })
+  @IsNumber()
+  @IsNotEmpty()
+  spendLimit: number
+
+  @ApiProperty({ example: '2024-12-16 17:00:00', description: 'The start time of the Secret Santa event.', required: true })
+  @IsDate()
+  @IsNotEmpty()
+  eventBeginAt: Date
+}
+
+class NestedGiftWishlist {
+  @ApiProperty({ example: 'Rolex watch', description: 'The name of gift wish', required: true })
+  @IsString()
+  @IsNotEmpty()
+  @Length(3, 255)
+  name?: string
+
+  @ApiProperty({ example: 'image from your wish', description: 'An image from the wish', required: false })
+  @IsString()
+  @IsOptional()
+  image?: string
+
+  @ApiProperty({ example: 'https://www.rolex.com/', description: 'The url of the wish', required: false })
+  @IsString()
+  @IsOptional()
+  giftUrl?: string
+}
 
 class NestedParticipant {
   @ApiProperty({ example: 'John Doe', description: 'The name of participant.', required: true })
@@ -74,6 +110,14 @@ export class Participant implements prisma.Participant {
   @ValidateNested()
   @Type(() => NestedParticipant)
   getFromParticipant?: NestedParticipant
+
+  @ValidateNested()
+  @Type(() => NestedSecretSantaEvent)
+  event?: NestedSecretSantaEvent
+
+  @ValidateNested()
+  @Type(() => NestedGiftWishlist)
+  giftWishlist?: NestedGiftWishlist
 
   @ApiProperty({ example: true, description: 'Create time for the Secret Santa event', required: true })
   @IsDate()

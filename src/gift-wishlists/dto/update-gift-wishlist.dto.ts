@@ -6,15 +6,15 @@ export class UpdateGiftWishlistDto {
   @IsString()
   @IsOptional()
   @Length(3, 255)
-  name: string
+  name?: string
 
   @ApiProperty({ example: 'image from your wish', description: 'An image from the wish', required: false })
   @IsString()
   @IsOptional()
-  image: string
+  image?: string
 
   @ApiProperty({ example: 'https://www.rolex.com/', description: 'The url of the wish', required: false })
   @IsString()
   @IsOptional()
-  gitfUrl: string
+  giftUrl?: string
 }

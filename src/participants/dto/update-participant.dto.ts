@@ -5,10 +5,10 @@ export class UpdateParticipantDto {
   @ApiProperty({ example: '2024-12-16 17:00:00', description: 'The time when the participant sends the gift.', required: false })
   @IsDate()
   @IsOptional()
-  sendGiftAt: Date
+  sendGiftAt?: Date
 
   @ApiProperty({ example: '2024-12-16 17:00:00', description: 'The time when the participant receives the gift.', required: false })
   @IsDate()
   @IsOptional()
-  receiveGiftAt: Date
+  receiveGiftAt?: Date
 }

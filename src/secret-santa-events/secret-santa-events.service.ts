@@ -62,6 +62,11 @@ export class SecretSantaEventsService {
   }
 
   async remove(organizerPublicId: string, publicId: string) {
+    const secretSantaEvent = await this.secretSantaEventsRepository.findOne(publicId);
+    if (!secretSantaEvent) {
+      throw new NotFoundException('Secret Santa event not found');
+    }
+
     this.secretSantaEventsRepository.remove(organizerPublicId, publicId);
   }
 }

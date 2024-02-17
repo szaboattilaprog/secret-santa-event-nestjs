@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ParticipantsRepository } from '@/src/participants/entities/repositories/participants-repository/participants-repository';
 import { SecretSantaEventsRepository } from '@/src/secret-santa-events/entities/repositories/secret-santa-events-repository/secret-santa-events-repository';
@@ -37,25 +37,26 @@ export class MakeGiftPairsListener {
 
       participant.givesToParticipantPublicId = stillNotGivesToParticipants[randomIndex].publicId;
       participant.givesToParticipant = stillNotGivesToParticipants[randomIndex];
+      this.logger.log(`participant with publicId: ${participant.publicId} gives to participant with publicId: ${stillNotGivesToParticipants[randomIndex].publicId}`);
       selectedGivesToParticipants.push(stillNotGivesToParticipants[randomIndex]);
 
       const stillNotGetFromParticipants = participants.filter(participant => !selectedGetFromParticipants.includes(participant));
       randomIndex = this.getRandomIndex(stillNotGetFromParticipants.length);
-      while (participant.publicId === stillNotGetFromParticipants[randomIndex].publicId || participant.givesToParticipantPublicId === stillNotGetFromParticipants[randomIndex].publicId) {
+      while (participant.publicId === stillNotGetFromParticipants[randomIndex].publicId || (participant.givesToParticipantPublicId === stillNotGetFromParticipants[randomIndex].publicId && stillNotGetFromParticipants.length > 1)) {
         randomIndex = this.getRandomIndex(stillNotGetFromParticipants.length);
       }
 
       participant.getFromParticipantPublicId = stillNotGetFromParticipants[randomIndex].publicId;
       participant.getFromParticipant = stillNotGetFromParticipants[randomIndex];
+      this.logger.log(`participant with publicId: ${participant.publicId} gets from participant with publicId: ${stillNotGetFromParticipants[randomIndex].publicId}`);
       selectedGetFromParticipants.push(stillNotGetFromParticipants[randomIndex]);
     }
 
     if (participants.length === selectedGivesToParticipants.length && participants.length === selectedGetFromParticipants.length) {
       this.logger.log('Updating all participants with random pairs');
-      this.participantsRepository.updateAll(participants);
+      this.participantsRepository.updatePairs(participants);
     } else {
-      this.logger.error('Error making random pairs');
-      this.makeRandomPairs(participants);
+      throw new BadRequestException('Error making random pairs');
     }
   }
 

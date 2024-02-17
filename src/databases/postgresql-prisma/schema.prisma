@@ -110,7 +110,7 @@ model GiftWishlist {
   publicId            String           @unique @default(uuid()) @db.Uuid
   name                String
   image               String?
-  gitfUrl             String?
+  giftUrl             String?
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
   participant         Participant      @relation(fields: [participantPublicId], references: [publicId])

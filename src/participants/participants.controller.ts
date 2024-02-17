@@ -7,7 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
-  NotAcceptableException
+  NotAcceptableException,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import dayjs from 'dayjs';
 import { ParticipantsService } from '@/src/participants/participants.service';
 import { CreateParticipantDto } from '@/src/participants/dto/create-participant.dto';
 import { UpdateByOrganizerParticipantDto } from '@/src/participants/dto/update-by-organizer-participant.dto';
@@ -30,6 +32,8 @@ import { Participant } from '@/src/participants/entities/participant.entity';
 @ApiBearerAuth()
 @Controller('participants')
 export class ParticipantsController {
+  private readonly logger = new Logger(ParticipantsController.name);
+
   constructor(private readonly participantsService: ParticipantsService) {}
 
   @Post()
@@ -72,8 +76,8 @@ export class ParticipantsController {
     }
 
     const participant = await this.participantsService.findOne(publicId);
-    if (auth.publicIdType === 'participant') {
-      const { getFromParticipantPublicId, ...returnParticipant } = participant;
+    if (auth.publicIdType === 'participant' && participant.event.eventBeginAt > new Date()) {
+      const { getFromParticipantPublicId, getFromParticipant, ...returnParticipant } = participant;
 
       return returnParticipant;
     }
@@ -103,9 +107,14 @@ export class ParticipantsController {
   @ApiResponse({ status: 401, description: 'Unauthorized for access update Participant' })
   @ApiResponse({ status: 406, description: 'Has not access for update Participant' })
   update(
+    @Auth() auth: AccessAuth,
     @Param('publicId') publicId: string,
     @Body() updateParticipantDto: UpdateParticipantDto,
   ): Promise<Participant> {
+    if (auth.publicId !== publicId) {
+      throw new NotAcceptableException('Has not access for update participant');
+    }
+
     return this.participantsService.update(publicId, updateParticipantDto);
   }
 

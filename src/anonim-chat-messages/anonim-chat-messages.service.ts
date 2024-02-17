@@ -15,6 +15,7 @@ export class AnonimChatMessagesService {
     const anonimChatMessage = await this.anonimChatMessagesRepository.create(createAnonimChatMessageDto);
 
     delete anonimChatMessage.id;
+    delete anonimChatMessage.participantPublicId;
 
     return anonimChatMessage;
   }
@@ -24,6 +25,8 @@ export class AnonimChatMessagesService {
 
     return anonimChatMessages.map(anonimChatMessage => {
       delete anonimChatMessage.id;
+      delete anonimChatMessage.participantPublicId;
+
       return anonimChatMessage;
     });
   }

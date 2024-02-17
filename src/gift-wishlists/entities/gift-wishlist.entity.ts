@@ -24,7 +24,7 @@ export class GiftWishlist implements prisma.GiftWishlist {
   @ApiProperty({ example: 'https://www.rolex.com/', description: 'The url of the wish', required: false })
   @IsString()
   @IsOptional()
-  gitfUrl: string
+  giftUrl: string
 
   @ApiProperty({ example: '2024-02-10 10:20:30', description: 'The create time of gift wish', required: true })
   @IsDate()
