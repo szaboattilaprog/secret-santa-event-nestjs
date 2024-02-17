@@ -10,6 +10,16 @@ generator client {
   previewFeatures = ["multiSchema"]
 }
 
+model Seed {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@schema("base")
+}
+
 model Creator {
   id        Int                @id @default(autoincrement())
   publicId  String             @unique @default(uuid()) @db.Uuid

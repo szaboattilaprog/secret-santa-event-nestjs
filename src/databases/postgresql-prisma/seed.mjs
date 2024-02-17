@@ -28,7 +28,7 @@ const asyncForeach = async (array, callback) => {
 }
 
 const seed = async () => {
-  await asyncForeach(glob.sync('src/database/postgresql/seeds/**/!(index)*.mjs'), async fileFullPath => {
+  await asyncForeach(glob.sync('src/databases/postgresql-prisma/seeds/**/!(index)*.mjs'), async fileFullPath => {
     const file = fileFullPath.replace('server/database', '.')
     const SeedImplementation = await import(file)
     if ('seed' in SeedImplementation && typeof SeedImplementation.seed === 'function') {
@@ -49,7 +49,7 @@ const seed = async () => {
         })
         console.info(`successfully installed`)
       } else {
-        console.info(`skipp because installed at ${dayjs(seed.createAt).format('YYYY-MM-DD HH:mm:ss')}`)
+        console.info(`skipp because installed at ${dayjs(seed.createdAt).format('YYYY-MM-DD HH:mm:ss')}`)
       }
       console.groupEnd()
     }
