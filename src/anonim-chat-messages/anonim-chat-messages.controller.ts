@@ -13,11 +13,11 @@ import {
 import { FindAllAnonimChatMessageDto } from '@/src/anonim-chat-messages/dto/find-all-anonim-chat-message.dto';
 import { AnonimChatMessagesService } from '@/src/anonim-chat-messages/anonim-chat-messages.service';
 import { AnonimChatMessage } from '@/src/anonim-chat-messages/entities/anonim-chat-message.entity';
-import { PartcipantAuthGuard } from '@/src/auth/partcipant-auth/partcipant-auth.guard';
+import { ParticipantAuthGuard } from '@/src/auth/participant-auth-guard/participant-auth.guard';
 
 @ApiTags('Anonim Chat Messages')
 @ApiBearerAuth()
-@UseGuards(PartcipantAuthGuard)
+@UseGuards(ParticipantAuthGuard)
 @Controller('anonim-chat-messages')
 export class AnonimChatMessagesController {
   constructor(private readonly anonimChatMessagesService: AnonimChatMessagesService) {}

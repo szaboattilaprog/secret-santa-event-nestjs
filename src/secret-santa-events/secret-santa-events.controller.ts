@@ -19,9 +19,9 @@ import { SecretSantaEventsService } from '@/src/secret-santa-events/secret-santa
 import { CreateSecretSantaEventDto } from '@/src/secret-santa-events/dto/create-secret-santa-event.dto';
 import { UpdateSecretSantaEventDto } from '@/src/secret-santa-events/dto/update-secret-santa-event.dto';
 import { SecretSantaEvent } from './entities/secret-santa-event.entity'
-import { Auth } from '@/src/auth/auth/auth.decorator'
+import { Auth } from '@/src/auth/auth-decorator/auth.decorator'
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
-import { CreatorAuthGuard } from '@/src/auth/creator-auth/creator-auth.guard';
+import { CreatorAuthGuard } from '@/src/auth/creator-auth-guard/creator-auth.guard';
 
 @ApiTags('Secret Santa Events')
 @ApiBearerAuth()

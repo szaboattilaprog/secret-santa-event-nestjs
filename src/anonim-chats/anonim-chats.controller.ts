@@ -18,13 +18,13 @@ import { AnonimChatsService } from '@/src/anonim-chats/anonim-chats.service';
 import { CreateAnonimChatDto } from '@/src/anonim-chats/dto/create-anonim-chat.dto';
 import { UpdateAnonimChatDto } from '@/src/anonim-chats/dto/update-anonim-chat.dto';
 import { AnonimChat } from './entities/anonim-chat.entity';
-import { Auth } from '@/src/auth/auth/auth.decorator';
+import { Auth } from '@/src/auth/auth-decorator/auth.decorator';
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
-import { PartcipantAuthGuard } from '@/src/auth/partcipant-auth/partcipant-auth.guard';
+import { ParticipantAuthGuard } from '@/src/auth/participant-auth-guard/participant-auth.guard';
 
 @ApiTags('Anonim Chats')
 @ApiBearerAuth()
-@UseGuards(PartcipantAuthGuard)
+@UseGuards(ParticipantAuthGuard)
 @Controller('anonim-chats')
 export class AnonimChatsController {
   constructor(private readonly anonimChatsService: AnonimChatsService) {}

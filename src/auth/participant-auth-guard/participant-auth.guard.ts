@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
 
 @Injectable()
-export class PartcipantAuthGuard implements CanActivate {
+export class ParticipantAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {

@@ -20,9 +20,9 @@ import { CreateParticipantDto } from '@/src/participants/dto/create-participant.
 import { UpdateByCreatorParticipantDto } from '@/src/participants/dto/update-by-creator-participant.dto';
 import { UpdateParticipantDto } from '@/src/participants/dto/update-participant.dto';
 import { FindAllParticipantDto } from '@/src/participants/dto/find-all-participant.dto';
-import { CreatorAuthGuard } from '@/src/auth/creator-auth/creator-auth.guard';
-import { PartcipantAuthGuard } from '@/src/auth/partcipant-auth/partcipant-auth.guard';
-import { Auth } from '@/src/auth/auth/auth.decorator'
+import { CreatorAuthGuard } from '@/src/auth/creator-auth-guard/creator-auth.guard';
+import { ParticipantAuthGuard } from '@/src/auth/participant-auth-guard/participant-auth.guard';
+import { Auth } from '@/src/auth/auth-decorator/auth.decorator'
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
 import { Participant } from '@/src/participants/entities/participant.entity';
 
@@ -96,7 +96,7 @@ export class ParticipantsController {
 
   @Patch(':publicId')
   @ApiOperation({ summary: 'Update a participant for Secret Sante event' })
-  @UseGuards(PartcipantAuthGuard)
+  @UseGuards(ParticipantAuthGuard)
   @ApiResponse({ type: Participant, status: 200 })
   @ApiResponse({ status: 404, description: 'Participant not found by public id' })
   @ApiResponse({ status: 401, description: 'Unauthorized for access Participant' })

@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateGiftWishlistDto } from '@/src/gift-wishlists/dto/create-gift-wishlist.dto';
 import { UpdateGiftWishlistDto } from '@/src/gift-wishlists/dto/update-gift-wishlist.dto';
 import { GiftWishlistsRepository } from '@/src/gift-wishlists/entities/repositories/gift-wishlists-repository/gift-wishlists-repository';
@@ -9,7 +8,6 @@ import { GiftWishlist } from '@/src/gift-wishlists/entities/gift-wishlist.entity
 export class GiftWishlistsService {
   constructor(
     private giftWishlistsRepository: GiftWishlistsRepository,
-    private eventEmitter: EventEmitter2
   ) {
   }
 

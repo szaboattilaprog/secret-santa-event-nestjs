@@ -18,11 +18,11 @@ import {
 import { CreatorsService } from '@/src/creators/creators.service';
 import { CreateCreatorDto } from '@/src/creators/dto/create-creator.dto';
 import { UpdateCreatorDto } from '@/src/creators/dto/update-creator.dto';
-import { Auth } from '@/src/auth/auth/auth.decorator';
+import { Auth } from '@/src/auth/auth-decorator/auth.decorator';
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
-import { Public } from '@/src/auth/public/public.decorator';
+import { IsPublic } from '@/src/auth/is-public-decorator/is-public.decorator';
 import { Creator } from '@/src/creators/entities/creator.entity';
-import { CreatorAuthGuard } from '@/src/auth/creator-auth/creator-auth.guard';
+import { CreatorAuthGuard } from '@/src/auth/creator-auth-guard/creator-auth.guard';
 
 @ApiTags('Creators')
 @Controller('creators')
@@ -34,7 +34,7 @@ export class CreatorsController {
   ) {}
 
   @Post()
-  @Public()
+  @IsPublic()
   @ApiOperation({ summary: 'Create a Creator of secret Santa event' })
   @ApiResponse({ type: Creator, status: 201 })
   create(@Body() createCreatorDto: CreateCreatorDto): Promise<Creator>{

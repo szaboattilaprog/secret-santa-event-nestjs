@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from '@/src/auth/auth.controller';
+import { JwtAuthGuard } from '@/src/auth/jwt-auth-guard/jwt-auth.guard';
+import { Reflector } from '@nestjs/core';
 import { AuthService } from '@/src/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -9,17 +10,18 @@ import { CreatorsRepository } from '@/src/creators/entities/repositories/creator
 import { ParticipantsRepository } from '@/src/participants/entities/repositories/participants-repository/participants-repository';
 import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
 
-describe('AuthController', () => {
-  let controller: AuthController;
+describe('JwtAuthGuard', () => {
+  let guard: JwtAuthGuard;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
       providers: [
+        JwtAuthGuard, 
+        Reflector, 
         AuthService, 
         ConfigService, 
         JwtService, 
-        CreatorsService, 
+        CreatorsService,
         ParticipantsService, 
         CreatorsRepository, 
         ParticipantsRepository, 
@@ -27,10 +29,10 @@ describe('AuthController', () => {
       ],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
+    guard = module.get<JwtAuthGuard>(JwtAuthGuard);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(guard).toBeDefined();
   });
 });

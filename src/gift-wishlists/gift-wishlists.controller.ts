@@ -18,14 +18,14 @@ import {
 import { GiftWishlistsService } from '@/src/gift-wishlists/gift-wishlists.service';
 import { CreateGiftWishlistDto } from '@/src/gift-wishlists/dto/create-gift-wishlist.dto';
 import { UpdateGiftWishlistDto } from '@/src/gift-wishlists/dto/update-gift-wishlist.dto';
-import { PartcipantAuthGuard } from '@/src/auth/partcipant-auth/partcipant-auth.guard';
-import { Auth } from '@/src/auth/auth/auth.decorator'
+import { ParticipantAuthGuard } from '@/src/auth/participant-auth-guard/participant-auth.guard';
+import { Auth } from '@/src/auth/auth-decorator/auth.decorator'
 import { AccessAuth } from '@/src/auth/entities/access-auth.entity';
 import { GiftWishlist } from '@/src/gift-wishlists/entities/gift-wishlist.entity';
 
 @ApiTags('Gift Wishlists')
 @ApiBearerAuth()
-@UseGuards(PartcipantAuthGuard)
+@UseGuards(ParticipantAuthGuard)
 @Controller('gift-wishlists')
 export class GiftWishlistsController {
   constructor(private readonly giftWishlistsService: GiftWishlistsService) {}

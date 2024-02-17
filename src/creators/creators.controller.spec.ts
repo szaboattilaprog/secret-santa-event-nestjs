@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreatorsController } from '@/src/creators/creators.controller';
 import { CreatorsService } from '@/src/creators/creators.service';
+import { CreatorsRepository } from '@/src/creators/entities/repositories/creators-repository/creators-repository';
+import { PostgresqlPrismaService } from '@/src/databases/postgresql-prisma/postgresql-prisma.service';
 
 describe('CreatorsController', () => {
   let controller: CreatorsController;
@@ -9,7 +10,7 @@ describe('CreatorsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CreatorsController],
-      providers: [CreatorsService],
+      providers: [CreatorsService, CreatorsRepository, PostgresqlPrismaService],
     }).compile();
 
     controller = module.get<CreatorsController>(CreatorsController);

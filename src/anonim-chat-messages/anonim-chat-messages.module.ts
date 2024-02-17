@@ -7,7 +7,7 @@ import { AnonimChatMessagesRepository } from '@/src/anonim-chat-messages/entitie
 
 @Module({
   imports: [PostgresqlPrismaModule],
-  providers: [AnonimChatMessagesGateway, AnonimChatMessagesController, AnonimChatMessagesService, AnonimChatMessagesRepository],
-  //exports: [AnonimChatMessagesRepository],
+  controllers: [AnonimChatMessagesController],
+  providers: [AnonimChatMessagesGateway, AnonimChatMessagesService, AnonimChatMessagesRepository],
 })
 export class AnonimChatMessagesModule {}

@@ -7,8 +7,8 @@ import {
 import { AuthService } from '@/src/auth/auth.service';
 import { CreateCreatorAuthDto } from '@/src/auth/dto/create-creator-auth.dto';
 import { CreatePartcipantAuthDto } from '@/src/auth/dto/create-partcipant-auth.dto';
-import { Public } from '@/src/auth/public/public.decorator';
-import { RefreshToken } from '@/src/auth/refresh-token/refresh-token.decorator';
+import { IsPublic } from '@/src/auth/is-public-decorator/is-public.decorator';
+import { RefreshToken } from '@/src/auth/refresh-token-decorator/refresh-token.decorator';
 import { AccessToken } from '@/src/auth/entities/access-token.entity';
 
 @ApiTags('Auth')
@@ -18,7 +18,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('refresh-creator-token')
-  @Public()
+  @IsPublic()
   @ApiOperation({ summary: 'Refresh access-token for Creator of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
   @ApiResponse({ status: 401, description: 'Unauthorized for access' })
@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @Get('refresh-partcipant-token')
-  @Public()
+  @IsPublic()
   @ApiOperation({ summary: 'Refresh access-token for Partcipant of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
   @ApiResponse({ status: 401, description: 'Unauthorized for access' })
@@ -40,7 +40,7 @@ export class AuthController {
   }
 
   @Post('creator-auth')
-  @Public()
+  @IsPublic()
   @ApiOperation({ summary: 'Create an access-token for Creator of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
   @ApiResponse({ status: 404, description: 'Creator not found by public id' })
@@ -49,7 +49,7 @@ export class AuthController {
   }
 
   @Post('partcipant-auth')
-  @Public()
+  @IsPublic()
   @ApiOperation({ summary: 'Create an access-token for Partcipant of secret Santa event' })
   @ApiResponse({ type: AccessToken, status: 200, description: 'Return access-token' })
   @ApiResponse({ status: 404, description: 'Partcipant not found by public id' })
