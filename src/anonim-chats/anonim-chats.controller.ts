@@ -32,9 +32,9 @@ export class AnonimChatsController {
   @Post()
   @ApiOperation({ summary: 'Create an anonimChat' })
   @ApiResponse({ type: AnonimChat, status: 201 })
-  @ApiResponse({ status: 404, description: 'Not created Anonim Chat' })
-  @ApiResponse({ status: 401, description: 'Unauthorized for access Anonim Chat' })
-  @ApiResponse({ status: 406, description: 'Has not access for Anonim Chat' })
+  @ApiResponse({ status: 400, description: 'Error creating AnonimChat' })
+  @ApiResponse({ status: 401, description: 'Unauthorized for access create Anonim Chat' })
+  @ApiResponse({ status: 406, description: 'Has not access for create Anonim Chat' })
   create(
     @Body() createAnonimChatDto: CreateAnonimChatDto): Promise<AnonimChat> {
     return this.anonimChatsService.create(createAnonimChatDto);
