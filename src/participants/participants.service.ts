@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateParticipantDto } from '@/src/participants/dto/create-participant.dto';
 import { UpdateByCreatorParticipantDto } from '@/src/participants/dto/update-by-creator-participant.dto';
 import { UpdateParticipantDto } from '@/src/participants/dto/update-participant.dto';
@@ -8,15 +9,30 @@ import { Participant } from '@/src/participants/entities/participant.entity';
 
 @Injectable()
 export class ParticipantsService {
+  private readonly logger = new Logger(ParticipantsService.name);
   constructor(
     private participantsRepository: ParticipantsRepository,
   ) {
   }
 
   async create(createParticipantDto: CreateParticipantDto): Promise<Participant> {
-    const paricipant = await this.participantsRepository.create(createParticipantDto);
+    let paricipant: Participant | null = null;
+    try {
+      paricipant = await this.participantsRepository.create(createParticipantDto);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          this.logger.error('The Participant already exists', error)
+          throw new BadRequestException('The Participant already exists', { cause: createParticipantDto.email });
+        }
+      }
+
+      this.logger.error(error, 'Error creating Participant');
+      throw new BadRequestException('Error creating Participant');
+    }
+
     if (!paricipant) {
-      throw new NotFoundException('Participant not created');
+      throw new BadRequestException('Error creating Participant');
     }
 
     delete paricipant.id;
